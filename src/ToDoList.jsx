@@ -2,8 +2,8 @@ import { Fragment, useState } from "react";
 
 function ToDoList() {
   const [tasks, setTasks] = useState([
-    { id: 1, name: "pera" },
-    { id: 2, name: "manzana" },
+    { id: 1, name: "pera", enabled: true },
+    { id: 2, name: "manzana", enabled: true },
   ]);
   const [texto, setTexto] = useState("");
   const handleAddtask = (event) => {
@@ -12,12 +12,18 @@ function ToDoList() {
     const newTask = {
       id: tasks.length + 1,
       name: texto,
+      enabled: false,
     };
     setTasks([...tasks, newTask]);
     console.log("task añadido");
     setTexto("");
   };
-
+  const isEnabled = (task) => {
+    console.log("dentro isEnabled");
+    task == true
+      ? "text-green-600 dark:text-green-400"
+      : "text-red-600 dark:text-red-400";
+  };
   return (
     <Fragment>
       <form onSubmit={handleAddtask}>
@@ -37,8 +43,27 @@ function ToDoList() {
       <ul>
         {tasks.map((task) => {
           return (
-            <li className="list-disc" key={task.id}>
-              {task.id}-{task.name}
+            <li
+              key={task.id}
+              className="flex items-center space-x-3 rtl:space-x-reverse"
+            >
+              <svg
+                className={`flex-shrink-0 w-3.5 h-3.5 ${
+                  task.enabled == true
+                    ? "text-green-600 dark:text-green-400"
+                    : "text-red-600 dark:text-red-400"
+                }`}
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 16 12"
+              >
+                <path stroke="currentColor" d="M1 5.917 5.724 10.5 15 1.5" />
+              </svg>
+              <span>
+                {task.id}-{task.name}
+              </span>
+              {isEnabled}
             </li>
           );
         })}
