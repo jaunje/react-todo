@@ -45,7 +45,10 @@ function ToDoList() {
           return (
             <li
               key={task.id}
-              className="flex items-center space-x-3 rtl:space-x-reverse"
+              className={`flex items-center space-x-3 rtl:space-x-reverse ${
+                task.enabled == false ? "" : "line-through"
+              }
+              `}
             >
               <svg
                 className={`flex-shrink-0 w-3.5 h-3.5 ${
