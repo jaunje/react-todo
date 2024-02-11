@@ -78,7 +78,7 @@ function ToDoList() {
             >
               <div className="flex items-start gap-4">
                 <span
-                  className={`${
+                  className={`cursor-pointer ${
                     task.enabled == true
                       ? "text-green-600 dark:text-green-400"
                       : "text-red-600 dark:text-red-400"
