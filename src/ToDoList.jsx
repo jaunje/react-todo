@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { useLocalStorage } from "react-use";
 
 function ToDoList() {
-  const [value, setValue, remove] = useLocalStorage("todolist", {});
+  const [value, setValue, remove] = useLocalStorage("todolist", []);
   const [tasks, setTasks] = useState([
     { id: uuidv4(), name: "pera", enabled: true },
     { id: uuidv4(), name: "manzana", enabled: true },
@@ -31,8 +31,6 @@ function ToDoList() {
   };
   const handleRemoveTask = (id) => {
     setTasks(tasks.filter((task) => task.id != id));
-
-    //setTasks(NewTask);
   };
   const handleToogleTask = (id) => {
     console.log("enable / disable task", id);
@@ -46,12 +44,7 @@ function ToDoList() {
       })
     );
   };
-  // const isEnabled = (task) => {
-  //   console.log("dentro isEnabled");
-  //   task == true
-  //     ? "text-green-600 dark:text-green-400"
-  //     : "text-red-600 dark:text-red-400";
-  // };
+
   return (
     <Fragment>
       <form onSubmit={handleAddtask} className="form">
@@ -68,7 +61,8 @@ function ToDoList() {
         </button>
       </form>
 
-      <ul>
+      <div>
+        {tasks.length != 0 ? "" : <h2>¿Qué quieres hacer?</h2>}
         {tasks &&
           tasks.map((task) => {
             return (
@@ -137,7 +131,7 @@ function ToDoList() {
               </div>
             );
           })}
-      </ul>
+      </div>
     </Fragment>
   );
 }
