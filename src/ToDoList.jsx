@@ -1,12 +1,21 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { useLocalStorage } from "react-use";
 
 function ToDoList() {
+  const [value, setValue, remove] = useLocalStorage("todolist", {});
   const [tasks, setTasks] = useState([
     { id: uuidv4(), name: "pera", enabled: true },
     { id: uuidv4(), name: "manzana", enabled: true },
   ]);
   const [texto, setTexto] = useState("");
+  useEffect(() => {
+    setTasks(value);
+  }, []);
+  useEffect(() => {
+    setValue(tasks);
+  }, [tasks, setValue]);
+
   const handleAddtask = (event) => {
     event.preventDefault();
     if (!texto) return;
@@ -16,6 +25,7 @@ function ToDoList() {
       enabled: false,
     };
     setTasks([...tasks, newTask]);
+
     console.log("task añadido");
     setTexto("");
   };
