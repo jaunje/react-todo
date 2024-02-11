@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { useLocalStorage } from "react-use";
 
 function ToDoList() {
-  const [value, setValue, remove] = useLocalStorage("todolist", []);
+  const [value, setValue] = useLocalStorage("todolist", []);
   const [tasks, setTasks] = useState([
     { id: uuidv4(), name: "pera", enabled: true },
     { id: uuidv4(), name: "manzana", enabled: true },
@@ -15,7 +15,9 @@ function ToDoList() {
   useEffect(() => {
     setValue(tasks);
   }, [tasks, setValue]);
-
+  const deleteAll = () => {
+    setTasks([]);
+  };
   const handleAddtask = (event) => {
     event.preventDefault();
     if (!texto) return;
@@ -60,6 +62,18 @@ function ToDoList() {
           Enviar
         </button>
       </form>
+      {tasks.length >= 2 ? (
+        <button
+          onClick={deleteAll}
+          type="button"
+          className="w-80 mb-2 block rounded border-2 border-danger px-6 pb-[6px] pt-2 text-xs font-medium uppercase leading-normal text-danger transition duration-150 ease-in-out hover:border-danger-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-danger-600 focus:border-danger-600 focus:text-danger-600 focus:outline-none focus:ring-0 active:border-danger-700 active:text-danger-700 dark:hover:bg-neutral-100 dark:hover:bg-opacity-10"
+          data-te-ripple-init
+        >
+          Borrar TODO
+        </button>
+      ) : (
+        ""
+      )}
 
       <div>
         {tasks.length != 0 ? "" : <h2>¿Qué quieres hacer?</h2>}
