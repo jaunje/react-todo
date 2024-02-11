@@ -4,5 +4,7 @@ export default {
   theme: {
     extend: {},
   },
+  /* eslint-disable */
   plugins: [require("@tailwindcss/forms")],
+  /* eslint-enable */
 };

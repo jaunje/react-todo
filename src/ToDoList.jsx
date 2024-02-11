@@ -1,16 +1,17 @@
 import { Fragment, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 function ToDoList() {
   const [tasks, setTasks] = useState([
-    { id: 1, name: "pera", enabled: true },
-    { id: 2, name: "manzana", enabled: true },
+    { id: uuidv4(), name: "pera", enabled: true },
+    { id: uuidv4(), name: "manzana", enabled: true },
   ]);
   const [texto, setTexto] = useState("");
   const handleAddtask = (event) => {
     event.preventDefault();
     if (!texto) return;
     const newTask = {
-      id: tasks.length + 1,
+      id: uuidv4(),
       name: texto,
       enabled: false,
     };
@@ -18,15 +19,32 @@ function ToDoList() {
     console.log("task añadido");
     setTexto("");
   };
-  const isEnabled = (task) => {
-    console.log("dentro isEnabled");
-    task == true
-      ? "text-green-600 dark:text-green-400"
-      : "text-red-600 dark:text-red-400";
+  const handleRemoveTask = (id) => {
+    setTasks(tasks.filter((task) => task.id != id));
+
+    //setTasks(NewTask);
   };
+  const handleToogleTask = (id) => {
+    console.log("enable / disable task", id);
+    setTasks(
+      tasks.map((task) => {
+        if (task.id == id) {
+          return { ...task, enabled: !task.enabled };
+        } else {
+          return task;
+        }
+      })
+    );
+  };
+  // const isEnabled = (task) => {
+  //   console.log("dentro isEnabled");
+  //   task == true
+  //     ? "text-green-600 dark:text-green-400"
+  //     : "text-red-600 dark:text-red-400";
+  // };
   return (
     <Fragment>
-      <form onSubmit={handleAddtask}>
+      <form onSubmit={handleAddtask} className="form">
         <input
           value={texto}
           onChange={(e) => setTexto(e.target.value)}
@@ -43,31 +61,71 @@ function ToDoList() {
       <ul>
         {tasks.map((task) => {
           return (
-            <li
-              key={task.id}
-              className={`flex items-center space-x-3 rtl:space-x-reverse ${
-                task.enabled == false ? "" : "line-through"
-              }
-              `}
-            >
-              <svg
-                className={`flex-shrink-0 w-3.5 h-3.5 ${
-                  task.enabled == true
-                    ? "text-green-600 dark:text-green-400"
-                    : "text-red-600 dark:text-red-400"
-                }`}
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 16 12"
+            <>
+              <div
+                key={task.id}
+                role="alert"
+                className="rounded-xl border border-gray-100 bg-white p-4 mb-1"
               >
-                <path stroke="currentColor" d="M1 5.917 5.724 10.5 15 1.5" />
-              </svg>
-              <span>
-                {task.id}-{task.name}
-              </span>
-              {isEnabled}
-            </li>
+                <div className="flex items-start gap-4">
+                  <span
+                    className={`${
+                      task.enabled == true
+                        ? "text-green-600 dark:text-green-400"
+                        : "text-red-600 dark:text-red-400"
+                    }`}
+                  >
+                    <svg
+                      onClick={() => handleToogleTask(task.id)}
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className="h-6 w-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                  </span>
+
+                  <div className="flex-1">
+                    <strong
+                      className={`block font-bold text-gray-900 ${
+                        task.enabled == false ? "" : "line-through"
+                      }`}
+                    >
+                      {task.name}
+                    </strong>
+
+                    <p className="mt-1 text-sm text-gray-700">ID: {task.id}</p>
+                  </div>
+
+                  <button className="text-gray-500 transition hover:text-gray-600">
+                    <span className="sr-only">Dismiss popup</span>
+
+                    <svg
+                      onClick={() => handleRemoveTask(task.id)}
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className="h-6 w-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </>
           );
         })}
       </ul>
